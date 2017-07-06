@@ -13,7 +13,7 @@ n_hl5 = 500
 n_hl6 = 500
 
 n_classes = 10
-batch_size = 100
+batch_size = 50
 
 X = tf.placeholder('float', [None, 784])
 Y = tf.placeholder('float')
