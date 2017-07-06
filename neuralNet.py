@@ -15,40 +15,35 @@ np.random.seed(0)
 def sigmoid(x):
 	return 1.0/(1.0 + np.exp(-x))
 
-
 def tanh_prime(x):
 	return 1 - np.tanh(x)**2
 
-
 def train(x, t, V, W, bv, bw):
-	
+
 	A = np.dot(x, V) + bv
 	Z = np.tanh(A)
-	
+
 	B = np.dot(Z, W) + bw
 	Y = sigmoid(B)
 
 	Ew = Y - t
 	Ev = tanh_prime(A) * np.dot(W, Ew)
-	
+
 	dW = np.outer(Z, Ew)
 	dV = np.outer(x, Ev)
-	
+
 	#cross entropy
 	loss = -np.mean(t * np.log(Y) + (1 - t) * np.log(1 - Y))
-	
-	return loss,  (dV, dW, Ev, Ew)
+
+	return loss,(dV, dW, Ev, Ew)
 
 
 def predict(x, V, W, bv, bw):
-	
 	A = np.dot(x, V) + bv
 	B = np.dot(np.tanh(A), W) + bw
 	return (sigmoid(B) > 0.5).astype(int)
 
-
 #creating layers
-
 V = np.random.normal(scale=0.1, size=(n_in, n_hidden))
 W = np.random.normal(scale=0.1, size=(n_hidden, n_outputs))
 
@@ -66,30 +61,28 @@ T = X ^ 1
 for epoch in range(100):
 	err = []
 	upd = [0]*len(params)
-	
+
 	t0 = time.clock()
-	
+
 	for i in range(X.shape[0]):
 		loss, grad = train(X[i], T[i], *params)
-		
+
 		for j in range(len(params)):
 			params[j] -= upd[j]
-			
+
 		for j in range(len(params)):
 			upd[j] = learning_rate * grad[j] + momentum * upd[j]
-			
+
 		err.append(loss)
-			
+
 	print('Epoch: %d, loss: %.8f, Time: %.4fs'%(
 		epoch, np.mean(err), time.clock()-t0
 	))
-	
-	
+
+
 #predict output probabilities
 x = np.random.binomial(1, 0.5, n_in)
 
 print("XOR Prediction")
 print "input:  ", x
 print "output:  ", predict(x, *params)
-
-		
