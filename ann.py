@@ -70,7 +70,7 @@ def train_ANN(x):
 	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=Y))
 	optimizer = tf.train.AdamOptimizer().minimize(cost)
 
-	n_epochs = 15
+	n_epochs = 10
 
 	with tf.Session() as sess:
 		sess.run(tf.global_variables_initializer())
